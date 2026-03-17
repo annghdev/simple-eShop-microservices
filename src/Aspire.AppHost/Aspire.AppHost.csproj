@@ -9,7 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Docker" Version="13.1.2-preview.1.26125.13" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.1.2" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="13.1.2" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="13.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\APIGateway\APIGateway.csproj" />
+    <ProjectReference Include="..\services\Catalog\Catalog.API\Catalog.API.csproj" />
+    <ProjectReference Include="..\services\Inventory\Inventory.API\Inventory.API.csproj" />
+    <ProjectReference Include="..\services\Order\Order.API\Order.API.csproj" />
   </ItemGroup>
 
 </Project>

@@ -19,4 +19,10 @@
     <ProjectReference Include="..\..\..\Aspire.ServiceDefaults\Aspire.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="Features\" />
+    <Folder Include="Messaging\" />
+  </ItemGroup>
+
 </Project>

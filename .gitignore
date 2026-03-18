@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /src/services/Inventory/Inventory.API/appsettings.Development.json
 /src/services/Order/Order.API/appsettings.Development.json
 /src/Aspire.AppHost/appsettings.Development.json
+/.cursor/rules

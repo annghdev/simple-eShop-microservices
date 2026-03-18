@@ -1,5 +1,22 @@
 <Solution>
-  <Folder Name="/monitoring/" />
+  <Folder Name="/monitoring/">
+    <File Path="monitoring/docker-compose.yml" />
+    <File Path="monitoring/monitoring-guide.md" />
+  </Folder>
+  <Folder Name="/monitoring/grafana/">
+    <File Path="monitoring/grafana/dashboards/eshop-overview.json" />
+    <File Path="monitoring/grafana/provisioning/dashboards/dashboards.yml" />
+    <File Path="monitoring/grafana/provisioning/datasources/datasources.yml" />
+  </Folder>
+  <Folder Name="/monitoring/loki/">
+    <File Path="monitoring/loki/loki-config.yml" />
+  </Folder>
+  <Folder Name="/monitoring/prometheus/">
+    <File Path="monitoring/prometheus/prometheus.yml" />
+  </Folder>
+  <Folder Name="/monitoring/tempo/">
+    <File Path="monitoring/tempo/tempo.yml" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".dockerignore" />
     <File Path="README.md" />

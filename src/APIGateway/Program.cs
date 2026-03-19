@@ -7,6 +7,8 @@ builder.AddServiceDefaults();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 var app = builder.Build();
 
@@ -24,7 +26,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.MapReverseProxy();
+
 app.MapGet("/", () => Results.Redirect("scalar/v1"));
-app.MapGet("/hello", () => "hello");
+app.MapGet("/hello", () => "Ok");
 
 app.Run();

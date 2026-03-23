@@ -20,9 +20,9 @@ public record ProductPriceChanged(Guid ProductId, decimal Price);
 
 
 // Image Events
+public record ProductImageAdded(Guid ProductId, string Image);
 public record ProductMainImageChanged(Guid ProductId, string MainImage);
 public record ProductSecondaryImageChanged(Guid ProductId, string SecondaryImage);
-public record ProductImageAdded(Guid ProductId, string Image);
 public record ProductImageRemoved(Guid ProductId, string Image);
 
 
@@ -46,6 +46,9 @@ public record ProductVariantCostChanged(Guid ProductId, Guid VariantId, decimal 
 public record ProductVariantPriceChanged(Guid ProductId, Guid VariantId, decimal Price);
 public record ProductVariantDimensionsChanged(Guid ProductId, Guid VariantId, ProductDimensions Dimensions);
 public record ProductVariantAttributeValueChanged(Guid ProductId, Guid VariantId, Guid AttributeId, AttributeValue Value);
+public record ProductVariantImageAdded(Guid ProductId, Guid VariantId, string Image);
+public record ProductVariantMainImageChanged(Guid ProductId, Guid VariantId, string Image);
+public record ProductVariantImageRemoved(Guid ProductId, Guid VariantId, string Image);
 public record ProductVariantRemoved(Guid ProductId, Guid VariantId);
 
 

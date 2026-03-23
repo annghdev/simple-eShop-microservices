@@ -27,18 +27,23 @@ public class Attribute
         return new AttributeNameEdited(Id, name);
     }
 
-    public AttributeValueAdded AddValue(string text, string bgStyle, string textStyle, string borderStyle)
+    public AttributeValueAdded AddValue(string text, string bgStyleClass, string textStyleClass, string borderStyleClass)
     {
         if (string.IsNullOrEmpty(text))
             throw new ArgumentException("Invalid value text");
 
+        text = text.Trim();
+
+        if (Values.Any(v => v.Text == text))
+            throw new ArgumentException("Duplicate value");
+
         var value = new AttributeValue
-        {
-            Text = text.Trim(),
-            BgStyle = bgStyle ?? string.Empty,
-            TextStyle = textStyle ?? string.Empty,
-            BorderStyle = borderStyle ?? string.Empty
-        };
+            {
+                Text = text,
+                BgStyleClass = bgStyleClass ?? string.Empty,
+                TextStyleClass = textStyleClass ?? string.Empty,
+                BorderStyleClass = borderStyleClass ?? string.Empty
+            };
         Values.Add(value);
 
         return new AttributeValueAdded(Id, value);
@@ -56,7 +61,7 @@ public class Attribute
 public class AttributeValue
 {
     public string Text { get; set; } = string.Empty;
-    public string BgStyle { get; set; } = string.Empty;
-    public string TextStyle { get; set; } = string.Empty;
-    public string BorderStyle { get; set; } = string.Empty;
+    public string BgStyleClass { get; set; } = string.Empty;
+    public string TextStyleClass { get; set; } = string.Empty;
+    public string BorderStyleClass { get; set; } = string.Empty;
 }

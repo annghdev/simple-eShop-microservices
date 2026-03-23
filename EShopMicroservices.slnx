@@ -1,41 +1,42 @@
 <Solution>
-  <Folder Name="/monitoring/">
-    <File Path="monitoring/docker-compose.yml" />
-    <File Path="monitoring/monitoring-guide.md" />
-  </Folder>
-  <Folder Name="/monitoring/grafana/">
-    <File Path="monitoring/grafana/dashboards/eshop-overview.json" />
-    <File Path="monitoring/grafana/provisioning/dashboards/dashboards.yml" />
-    <File Path="monitoring/grafana/provisioning/datasources/datasources.yml" />
-  </Folder>
-  <Folder Name="/monitoring/loki/">
-    <File Path="monitoring/loki/loki-config.yml" />
-  </Folder>
-  <Folder Name="/monitoring/prometheus/">
-    <File Path="monitoring/prometheus/prometheus.yml" />
-  </Folder>
-  <Folder Name="/monitoring/tempo/">
-    <File Path="monitoring/tempo/tempo.yml" />
-  </Folder>
-  <Folder Name="/development/">
-    <Project Path="development/EShop.Development.Compose.dcproj">
-      <Build />
-    </Project>
+  <Folder Name="/docker-composes/" />
+  <Folder Name="/docker-composes/development/">
     <File Path="development/.env" />
     <File Path="development/docker-compose.yml" />
     <File Path="development/prometheus.yml" />
     <File Path="development/README.md" />
     <File Path="development/run-all.ps1" />
-  </Folder>
-  <Folder Name="/production/">
-    <Project Path="production/EShop.Production.Compose.dcproj">
+    <Project Path="development/EShop.Development.Compose.dcproj">
       <Build />
     </Project>
+  </Folder>
+  <Folder Name="/docker-composes/monitoring/">
+    <File Path="monitoring/docker-compose.yml" />
+    <File Path="monitoring/monitoring-guide.md" />
+  </Folder>
+  <Folder Name="/docker-composes/monitoring/grafana/">
+    <File Path="monitoring/grafana/dashboards/eshop-overview.json" />
+    <File Path="monitoring/grafana/provisioning/dashboards/dashboards.yml" />
+    <File Path="monitoring/grafana/provisioning/datasources/datasources.yml" />
+  </Folder>
+  <Folder Name="/docker-composes/monitoring/loki/">
+    <File Path="monitoring/loki/loki-config.yml" />
+  </Folder>
+  <Folder Name="/docker-composes/monitoring/prometheus/">
+    <File Path="monitoring/prometheus/prometheus.yml" />
+  </Folder>
+  <Folder Name="/docker-composes/monitoring/tempo/">
+    <File Path="monitoring/tempo/tempo.yml" />
+  </Folder>
+  <Folder Name="/docker-composes/production/">
     <File Path="production/.env" />
     <File Path="production/docker-compose.yml" />
     <File Path="production/prometheus.yml" />
     <File Path="production/README.md" />
     <File Path="production/run-all.ps1" />
+    <Project Path="production/EShop.Production.Compose.dcproj">
+      <Build />
+    </Project>
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".dockerignore" />

@@ -27,4 +27,8 @@
     <ProjectReference Include="..\shared\Kernel\Kernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Auth\" />
+  </ItemGroup>
+
 </Project>

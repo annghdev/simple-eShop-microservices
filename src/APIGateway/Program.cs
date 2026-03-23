@@ -1,14 +1,21 @@
-using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.RateLimiting;
 using Scalar.AspNetCore;
+using System.Net;
+using System.Threading.RateLimiting;
+using Wolverine;
+using Wolverine.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-
+builder.Services.AddWolverineHttp();
+builder.Host.UseWolverine();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
@@ -89,7 +96,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseRateLimiter();
-
+//app.UseAuthentication();
+//app.UseAuthorization();
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("AllowAll");
@@ -100,7 +108,7 @@ else
 }
 
 app.MapReverseProxy();
-
+app.MapWolverineEndpoints();
 app.MapGet("/", () => Results.Redirect("scalar/v1"));
 
 //app.MapGet("/hello", () => "Ok")

@@ -104,6 +104,8 @@ public class Product
     }
     public ProductSecondaryImageChanged ChangeSecondaryImage(string secondaryImage)
     {
+        if (!string.IsNullOrEmpty(secondaryImage) && secondaryImage == MainImage)
+            throw new ArgumentException("Secondary can not same with Main image");
         SecondaryImage = secondaryImage;
         return new ProductSecondaryImageChanged(Id, secondaryImage);
     }
@@ -215,6 +217,46 @@ public class Product
         variant.Attribtues[attributeId] = value;
 
         return new ProductVariantAttributeValueChanged(Id, variantId, attributeId, value);
+    }
+
+    public ProductVariantImageAdded AddVariantImage(Guid variantId, string image)
+    {
+        if (string.IsNullOrEmpty(image))
+            throw new ArgumentException("Invalid image");
+
+        var variant = Variants.FirstOrDefault(v => v.Id == variantId)
+            ?? throw new ArgumentException($"variant with ID {variantId} does not exist");
+
+        variant.Images.Add(image);
+
+        return new ProductVariantImageAdded(Id, variantId, image);
+    }
+
+    public ProductVariantMainImageChanged ChangeVariantMainImage(Guid variantId, string image)
+    {
+        if (string.IsNullOrEmpty(image))
+            throw new ArgumentException("Invalid image");
+
+        var variant = Variants.FirstOrDefault(v => v.Id == variantId)
+            ?? throw new ArgumentException($"variant with ID {variantId} does not exist");
+
+        variant.MainImage = image;
+
+        return new ProductVariantMainImageChanged(Id, variantId, image);
+    }
+
+    public ProductVariantImageRemoved RemoveVariantImage(Guid variantId, string image)
+    {
+        if (string.IsNullOrEmpty(image))
+            throw new ArgumentException("Invalid image");
+
+        var variant = Variants.FirstOrDefault(v => v.Id == variantId)
+            ?? throw new ArgumentException($"variant with ID {variantId} does not exist");
+
+        if (variant.Images.Any(i => i == image))
+            variant.Images.Remove(image);
+
+        return new ProductVariantImageRemoved(Id, variantId, image);
     }
 
     public ProductVariantRemoved RemoveVariant(Guid variantId)

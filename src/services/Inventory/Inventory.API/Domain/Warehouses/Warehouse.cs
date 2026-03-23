@@ -1,4 +1,4 @@
-﻿namespace Inventory.API;
+﻿namespace Inventory.Domain;
 
 public class Warehouse
 {

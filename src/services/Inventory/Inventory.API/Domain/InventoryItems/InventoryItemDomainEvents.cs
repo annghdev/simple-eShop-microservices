@@ -1,4 +1,4 @@
-﻿namespace Inventory.API;
+﻿namespace Inventory.Domain;
 
 public record ItemInitialized(Guid Id, Guid ProductId, Guid? VariantId, Guid WarehouseId);
 

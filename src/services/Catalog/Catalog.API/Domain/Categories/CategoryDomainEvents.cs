@@ -1,4 +1,4 @@
-﻿namespace Catalog.API;
+﻿namespace Catalog.Domain;
 
 public record CategoryNameEdited(Guid Id, string Name);
 public record CategoryIconChanged(Guid Id, string Icon);

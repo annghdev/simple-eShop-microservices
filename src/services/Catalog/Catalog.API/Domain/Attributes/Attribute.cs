@@ -1,4 +1,4 @@
-﻿namespace Catalog.API;
+﻿namespace Catalog.Domain;
 
 public class Attribute
 {

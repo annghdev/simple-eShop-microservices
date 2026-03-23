@@ -1,4 +1,4 @@
-﻿namespace Catalog.API;
+﻿namespace Catalog.Domain;
 
 public record AttributeCreated(Attribute Attribute);
 public record AttributeNameEdited(Guid AttributeId, string Name);

@@ -1,4 +1,4 @@
-﻿namespace Inventory.API;
+﻿namespace Inventory.Domain;
 
 public record WarehouseCreated(Guid Id, string Name, decimal Latitude, decimal Longitude);
 public record WarehouseDeactivated(Guid Id);

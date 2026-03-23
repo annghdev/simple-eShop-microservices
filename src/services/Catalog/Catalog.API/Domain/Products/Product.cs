@@ -71,13 +71,13 @@ public class Product
         return new ProductDescriptionEdited(Id, description);
     }
 
-    public ProductDeactivated Decative()
+    public ProductDeactivated Deactive()
     {
         IsActive = false;
         return new ProductDeactivated(Id);
     }
 
-    public ProductReactivated Recative()
+    public ProductReactivated Reactive()
     {
         IsActive = true;
         return new ProductReactivated(Id);
@@ -259,6 +259,24 @@ public class Product
         return new ProductVariantImageRemoved(Id, variantId, image);
     }
 
+    public ProductVariantDeactivated DeactiveVariant(Guid variantId)
+    {
+        var variant = Variants.FirstOrDefault(v => v.Id == variantId)
+            ?? throw new ArgumentException($"variant with ID {variantId} does not exist");
+
+        variant.IsActive = false;
+        return new ProductVariantDeactivated(Id, variantId);
+    }
+
+    public ProductVariantReactivated ReactiveVariant(Guid variantId)
+    {
+        var variant = Variants.FirstOrDefault(v => v.Id == variantId)
+            ?? throw new ArgumentException($"variant with ID {variantId} does not exist");
+
+        variant.IsActive = false;
+        return new ProductVariantReactivated(Id, variantId);
+    }
+
     public ProductVariantRemoved RemoveVariant(Guid variantId)
     {
         var variant = Variants.FirstOrDefault(v => v.Id == variantId)
@@ -292,6 +310,7 @@ public class Variant
     public string MainImage { get; set; } = string.Empty;
     public List<string> Images { get; set; } = [];
     public Dictionary<Guid, AttributeValue> Attribtues { get; set; } = [];
+    public bool IsActive { get; set; } = true;
 }
 
 public class ProductAttribute

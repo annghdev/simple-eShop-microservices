@@ -49,6 +49,8 @@ public record ProductVariantAttributeValueChanged(Guid ProductId, Guid VariantId
 public record ProductVariantImageAdded(Guid ProductId, Guid VariantId, string Image);
 public record ProductVariantMainImageChanged(Guid ProductId, Guid VariantId, string Image);
 public record ProductVariantImageRemoved(Guid ProductId, Guid VariantId, string Image);
+public record ProductVariantDeactivated(Guid ProductId, Guid VariantId);
+public record ProductVariantReactivated(Guid ProductId, Guid VariantId);
 public record ProductVariantRemoved(Guid ProductId, Guid VariantId);
 
 

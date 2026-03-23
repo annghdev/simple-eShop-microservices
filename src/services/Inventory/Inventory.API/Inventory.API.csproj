@@ -21,4 +21,9 @@
     <ProjectReference Include="..\..\..\shared\Kernel\Kernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\" />
+    <Folder Include="Messaging\IntegrationEventHandlers\" />
+  </ItemGroup>
+
 </Project>

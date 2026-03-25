@@ -1,3 +1,5 @@
-﻿namespace Inventory.IntegrationEvents;
+﻿using Kernel.Interfaces;
 
-public record InventoryReservationFailed(Guid OrderId); // => CancelOrder
+namespace Inventory.IntegrationEvents;
+
+public record InventoryReservationFailed(Guid OrderId): IIntegrationEvent; // ==> CancelOrder

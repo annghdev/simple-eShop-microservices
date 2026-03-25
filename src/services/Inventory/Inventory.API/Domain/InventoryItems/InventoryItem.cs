@@ -41,12 +41,17 @@ public class InventoryItem
         IsVariantActive = true;
     }
 
+    public StockReceived Receive(int quantity)
+    {
+        return new StockReceived(Id, quantity);
+    }
+
     public void Apply(StockReceived e)
     {
         Available += e.Quantity;
     }
 
-    public StockTranfered Tranfer(int quantity, Guid toWarehouseId)
+    public StockTransfered Tranfer(int quantity, Guid toWarehouseId)
     {
         if (Available < quantity)
             throw new InvalidOperationException("Available quantity not enough");
@@ -54,18 +59,18 @@ public class InventoryItem
         if (toWarehouseId == Guid.Empty)
             throw new ArgumentException("Invalid Warehouse ID");
 
-        return new StockTranfered(Id, quantity, toWarehouseId);
+        return new StockTransfered(Id, quantity, toWarehouseId);
     }
 
-    public void Apply(StockTranfered e)
+    public void Apply(StockTransfered e)
     {
         Available -= e.Quantity;
     }
 
     public StockAdjusted AdjustStock(int quantity)
     {
-        if (IsProductActive && IsVariantActive)
-            throw new InvalidOperationException("The product was not locked before the adjustment, that may lead to errors in inventory data");
+        //if (IsProductActive && IsVariantActive)
+        //    throw new InvalidOperationException("The product was not locked before the adjustment, that may lead to errors in inventory data");
 
         return new StockAdjusted(Id, quantity);
     }
@@ -75,18 +80,18 @@ public class InventoryItem
         Available = e.Quantity;
     }
 
-    public void Apply(StockReserved e)
+    public void Apply(ReservationSucceeded e)
     {
         Available -= e.Quantity;
         Reserved += e.Quantity;
     }
 
-    public void Apply(StockCommitted e)
+    public void Apply(ReservationCommitted e)
     {
         Reserved -= e.Quantity;
     }
 
-    public void Apply(StockReleased e)
+    public void Apply(ReservationReleased e)
     {
         Reserved -= e.Quantity;
         Available += e.Quantity;

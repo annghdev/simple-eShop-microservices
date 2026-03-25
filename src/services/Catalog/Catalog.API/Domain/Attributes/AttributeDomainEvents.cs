@@ -1,7 +1,9 @@
-﻿namespace Catalog.Domain;
+﻿using Kernel.Interfaces;
 
-public record AttributeCreated(Attribute Attribute);
-public record AttributeNameEdited(Guid AttributeId, string Name);
+namespace Catalog.Domain;
+
+public record AttributeCreated(Attribute Attribute) : IDomainEvent;
+public record AttributeNameEdited(Guid AttributeId, string Name) : IDomainEvent;
 public record AttributeDeleted(Guid AttributeId);
-public record AttributeValueAdded(Guid AttributeId, AttributeValue Value);
-public record AttributeValueRemoved(Guid AttributeId, string ValueText);
+public record AttributeValueAdded(Guid AttributeId, AttributeValue Value) : IDomainEvent;
+public record AttributeValueRemoved(Guid AttributeId, string ValueText) : IDomainEvent;

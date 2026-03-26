@@ -1,4 +1,4 @@
-﻿using Catalog.IntegrationEvents;
+using Catalog.IntegrationEvents;
 
 namespace Inventory.Messaging;
 
@@ -7,11 +7,22 @@ namespace Inventory.Messaging;
 /// </summary>
 public static class ProductPublishedHandler
 {
-    public static async Task<object[]> Handle(ProductPublished e, IQuerySession qSession, IDocumentSession dSession)
+    public static async Task<object[]> Handle(
+        ProductPublished e,
+        IQuerySession qSession,
+        IDocumentSession dSession,
+        ILogger<ProductPublished> logger)
     {
+        logger.LogInformation("Received ProductPublished integration event for ProductId {ProductId}", e.ProductId);
+
         var warehouseIds = await qSession.Query<Warehouse>().Select(w => w.Id).ToListAsync();
         if (warehouseIds.Count == 0)
-            throw new Exception("Empty Warehouse list");
+        {
+            logger.LogWarning(
+                "Received ProductPublished for ProductId {ProductId}, but no warehouse exists. Skipping inventory item initialization.",
+                e.ProductId);
+            return [];
+        }
 
         List<ItemInitialized> initItemEvents = [];
 

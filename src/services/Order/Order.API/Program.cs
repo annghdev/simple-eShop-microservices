@@ -3,6 +3,7 @@ using JasperFx.Core;
 using JasperFx.Resources;
 using Kernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Order;
 using Order.IntegrationEvents;
 using Scalar.AspNetCore;
 using Wolverine;
@@ -20,7 +21,7 @@ builder.Host.UseWolverine(opts =>
     var dbConectionString = builder.Configuration.GetConnectionString("orderdb")!;
     opts.PersistMessagesWithPostgresql(dbConectionString);
 
-    opts.Services.AddDbContextWithWolverineIntegration<DbContext>(
+    opts.Services.AddDbContextWithWolverineIntegration<OrderDbContext>(
         x => x.UseNpgsql(dbConectionString));
 
     opts.UseFluentValidation();
@@ -45,11 +46,7 @@ builder.Host.UseWolverine(opts =>
         rule.ToLocalQueue("domain_events").Sequential();
     });
 
-    var rabbitConnectionString = builder.Configuration.GetConnectionString("rabbitmq")!;
-
-
-    opts.UseRabbitMq(rabbitConnectionString)
-
+    opts.UseRabbitMq(builder.Configuration.GetConnectionString("rabbitmq")!)
        .AutoProvision()
        .ConfigureChannelCreation(c =>
        {
@@ -66,6 +63,7 @@ builder.Host.UseWolverine(opts =>
         {
             exchange.ExchangeType = ExchangeType.Fanout;
             exchange.IsDurable = true;
+            exchange.BindQueue("inventory.integration_events");
         });
     });
 });

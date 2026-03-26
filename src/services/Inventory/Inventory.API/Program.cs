@@ -30,12 +30,6 @@ builder.Host.UseWolverine(opts =>
     opts.AutoBuildMessageStorageOnStartup = AutoCreate.CreateOrUpdate;
 
     // Local Queue config
-    opts.Publish(rule =>
-    {
-        rule.MessagesImplementing<IDomainEvent>();
-        rule.ToLocalQueue("domain_events").Sequential();
-    });
-
     opts.MessagePartitioning
         .ByMessage<IReservationEvent>(x => x.OrderId.ToString())
         .PublishToPartitionedLocalMessaging("reservation", 4, topology =>
@@ -49,18 +43,26 @@ builder.Host.UseWolverine(opts =>
                 queue.TelemetryEnabled(true);
             });
         });
-    
-    // RabbitMQ config
-    var rabbitConnectionString = builder.Configuration.GetConnectionString("rabbitmq")!;
 
-    opts.UseRabbitMq(rabbitConnectionString)
+    //opts.Publish(rule =>
+    //{
+    //    rule.MessagesImplementing<IDomainEvent>();
+    //    rule.ToLocalQueue("domain_events").Sequential();
+    //});
+
+    // RabbitMQ config
+    opts.UseRabbitMq(builder.Configuration.GetConnectionString("rabbitmq")!)
        .AutoProvision()
+       .BindExchange("integration_events")
+       .ToQueue("inventory.integration_events")
        .ConfigureChannelCreation(c =>
        {
            c.PublisherConfirmationsEnabled = true;
            c.PublisherConfirmationTrackingEnabled = true;
            c.ConsumerDispatchConcurrency = 5;
        });
+
+    opts.ListenToRabbitQueue("inventory.integration_events");
 
     opts.Publish(rule =>
     {

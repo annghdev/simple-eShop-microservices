@@ -30,18 +30,14 @@ builder.Host.UseWolverine(opts =>
 
     opts.AutoBuildMessageStorageOnStartup = AutoCreate.CreateOrUpdate;
 
-    opts.Publish(rule =>
-    {
-        rule.MessagesImplementing<IDomainEvent>();
+    //opts.Publish(rule =>
+    //{
+    //    rule.MessagesImplementing<IDomainEvent>();
 
-        rule.ToLocalQueue("domain_events").Sequential();
-    });
+    //    rule.ToLocalQueue("domain_events").Sequential();
+    //});
 
-    var rabbitConnectionString = builder.Configuration.GetConnectionString("rabbitmq")!;
-
-
-    opts.UseRabbitMq(rabbitConnectionString)
-
+    opts.UseRabbitMq(builder.Configuration.GetConnectionString("rabbitmq")!)
        .AutoProvision()
        .ConfigureChannelCreation(c =>
        {
@@ -58,6 +54,7 @@ builder.Host.UseWolverine(opts =>
         {
             exchange.ExchangeType = ExchangeType.Fanout;
             exchange.IsDurable = true;
+            exchange.BindQueue("inventory.integration_events");
         });
     });
 });

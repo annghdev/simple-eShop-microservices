@@ -11,6 +11,8 @@ public class DataSeeder(IDocumentSession session)
 
     private static readonly Guid InventoryItem1Id = Guid.Parse("11111111-1111-3333-3333-333333333333");
     private static readonly Guid InventoryItem2Id = Guid.Parse("11111111-2222-3333-3333-333333333333");
+    private static readonly Guid InventoryItem3Id = Guid.Parse("11111111-3333-4444-3333-333333333333");
+    private static readonly Guid InventoryItem4Id = Guid.Parse("11111111-4444-3333-3333-333333333333");
 
     public async Task SeedAsync()
     {
@@ -31,6 +33,10 @@ public class DataSeeder(IDocumentSession session)
                 ProductId,
                 Variant1Id,
                 Warehouse1Id));
+
+            session.Events.Append(InventoryItem1Id, new StockAdjusted(
+                InventoryItem1Id,
+                100));
         }
 
         if (await session.Events.AggregateStreamAsync<InventoryItem>(InventoryItem2Id) is null)
@@ -39,7 +45,37 @@ public class DataSeeder(IDocumentSession session)
                 InventoryItem2Id,
                 ProductId,
                 Variant2Id,
+                Warehouse1Id));
+
+            session.Events.Append(InventoryItem2Id, new StockAdjusted(
+                InventoryItem2Id,
+                100));
+        }
+
+        if (await session.Events.AggregateStreamAsync<InventoryItem>(InventoryItem3Id) is null)
+        {
+            session.Events.Append(InventoryItem3Id, new ItemInitialized(
+                InventoryItem3Id,
+                ProductId,
+                Variant1Id,
                 Warehouse2Id));
+
+            session.Events.Append(InventoryItem3Id, new StockAdjusted(
+                InventoryItem3Id,
+                100));
+        }
+
+        if (await session.Events.AggregateStreamAsync<InventoryItem>(InventoryItem4Id) is null)
+        {
+            session.Events.Append(InventoryItem4Id, new ItemInitialized(
+                InventoryItem4Id,
+                ProductId,
+                Variant2Id,
+                Warehouse2Id));
+
+            session.Events.Append(InventoryItem4Id, new StockAdjusted(
+                InventoryItem4Id,
+                100));
         }
 
         await session.SaveChangesAsync();

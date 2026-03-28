@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Order.API.Migrations
+namespace Order.API.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class InitOrderDb : Migration
@@ -16,7 +16,10 @@ namespace Order.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CustomerId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uuid", maxLength: 50, nullable: true),
+                    GuestId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CustomerName = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     Address = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     Promotions = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
                     CouponCode = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),

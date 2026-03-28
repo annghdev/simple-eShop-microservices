@@ -30,7 +30,7 @@ public class DataSeeder(OrderDbContext context)
         var order = new Domain.Order
         {
             Id = SeedOrderId,
-            CustomerId = "seed-customer-001",
+            CustomerId = Guid.Parse("11111111-2222-3333-4444-333333333333"),
             Address = "123 Seed Street, Ho Chi Minh City",
             OriginalAmount = 799m,
             CouponDiscount = 0m,

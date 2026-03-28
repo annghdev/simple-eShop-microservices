@@ -8,7 +8,7 @@ using Order;
 
 #nullable disable
 
-namespace Order.API.Migrations
+namespace Order.API.Persistence.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
     partial class OrderDbContextModelSnapshot : ModelSnapshot
@@ -107,15 +107,21 @@ namespace Order.API.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
+                    b.Property<Guid?>("CustomerId")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("CustomerNote")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
+
+                    b.Property<Guid?>("GuestId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
@@ -128,6 +134,11 @@ namespace Order.API.Migrations
 
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("integer");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<string>("Promotions")
                         .HasMaxLength(400)

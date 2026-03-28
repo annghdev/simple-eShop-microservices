@@ -10,7 +10,11 @@ public class Order
     [Key]
     public Guid Id { get; set; }
     [MaxLength(50)]
-    public string CustomerId { get; set; } = string.Empty;
+    public Guid? CustomerId { get; set; }
+    public Guid? GuestId { get; set; }
+    public string CustomerName { get; set; } = string.Empty;
+    [MaxLength(15)]
+    public string PhoneNumber { get; set; } = string.Empty;
     [MaxLength(250)]
     public string Address { get; set; } = string.Empty;
     [MaxLength(400)]

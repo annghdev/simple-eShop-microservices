@@ -6,6 +6,7 @@ using Kernel.Interfaces;
 using Kernel.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Order;
+using Order.Persistence;
 using Order.GrpcServices;
 using Order.IntegrationEvents;
 using Scalar.AspNetCore;
@@ -18,6 +19,8 @@ using Wolverine.Postgresql;
 using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Wolverine
 
 builder.Host.UseWolverine(opts =>
 {
@@ -73,6 +76,8 @@ builder.Host.UseWolverine(opts =>
 
 builder.Host.UseResourceSetupOnStartup();
 
+#endregion
+
 builder.AddServiceDefaults();
 
 var inventoryGrpcAddress = builder.Configuration.GetConnectionString("inventory") ?? "http://localhost:5002";
@@ -87,6 +92,7 @@ builder.Services
     .AddServiceDiscovery();
 
 builder.Services.AddScoped<IGetProductStocksCaller, GetProductStocksCaller>();
+builder.Services.AddScoped<DataSeeder>();
 
 #endregion
 
@@ -115,5 +121,23 @@ app.UseMiddleware<GlobalExceptionHandler>();
 
 app.MapWolverineEndpoints();
 app.MapGet("/", () => Results.Redirect("scalar/v1"));
+
+using var scope = app.Services.CreateScope();
+try
+{
+    // Migrate Orders
+    var orderContext = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
+    await orderContext.Database.MigrateAsync();
+
+    // Seed data
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    await seeder.SeedAsync();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error during database migration or seeding: {ex.Message}");
+    throw;
+}
+
 
 return await app.RunJasperFxCommands(args);

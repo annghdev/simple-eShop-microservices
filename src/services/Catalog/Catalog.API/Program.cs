@@ -1,4 +1,5 @@
 using Catalog.IntegrationEvents;
+using Catalog.Persistence;
 using JasperFx;
 using JasperFx.Core;
 using Kernel.Middlewares;
@@ -12,6 +13,8 @@ using Wolverine.Marten;
 using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Wolverine + Marten
 
 builder.Host.UseWolverine(opts =>
 {
@@ -65,11 +68,17 @@ builder.Services.AddMarten(opts =>
 })
 .IntegrateWithWolverine();
 
+builder.Services.AddWolverineHttp();
+
+#endregion
+
 builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddWolverineHttp();
+builder.Services.AddGrpc();
+
+builder.Services.AddScoped<DataSeeder>();
 
 var app = builder.Build();
 
@@ -92,5 +101,19 @@ app.UseMiddleware<GlobalExceptionHandler>();
 app.MapWolverineEndpoints();
 
 app.MapGet("/", () => Results.Redirect("scalar/v1"));
+
+using var scope = app.Services.CreateScope();
+try
+{
+    // Seed data
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    await seeder.SeedAsync();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error during database migration or seeding: {ex.Message}");
+    throw;
+}
+
 
 return await app.RunJasperFxCommands(args);

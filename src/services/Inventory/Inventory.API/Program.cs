@@ -1,5 +1,6 @@
 using Inventory.GrpcServices;
 using Inventory.IntegrationEvents;
+using Inventory.Persistence;
 using JasperFx;
 using Kernel.Middlewares;
 using Marten.Events.Projections;
@@ -92,12 +93,13 @@ builder.Services.AddWolverineHttp();
 
 #region Grpc
 builder.Services.AddGrpc();
-
 #endregion
 
-
 builder.AddServiceDefaults();
+
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<DataSeeder>();
 
 var app = builder.Build();
 
@@ -122,6 +124,19 @@ app.MapWolverineEndpoints();
 
 app.MapGet("/", () => Results.Redirect("scalar/v1"));
 
-app.Run();
+using var scope = app.Services.CreateScope();
+try
+{
+    // Seed data
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    await seeder.SeedAsync();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error during database migration or seeding: {ex.Message}");
+    throw;
+}
+
+
 
 return await app.RunJasperFxCommands(args);

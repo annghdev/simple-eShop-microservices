@@ -25,8 +25,8 @@ public class GetProductStockHandler
                     ItemId = i.Id,
                     Available = i.Available,
                     WarehouseId = i.WarehouseId,
-                    WarehouseLat = 0,
-                    WarehouseLng = 0,
+                    WarehouseLat = warehouses.First(w=>w.Id==i.WarehouseId).Latitude,
+                    WarehouseLng = warehouses.First(w => w.Id == i.WarehouseId).Longitude,
                 })
             });
         }

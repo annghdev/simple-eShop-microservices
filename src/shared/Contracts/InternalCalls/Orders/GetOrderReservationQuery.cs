@@ -11,7 +11,8 @@ public class OrderReservationInfo
 
 public enum ReservationStatus
 {
-    Reserving,
+    Pending,
+    Failed,
     Reserved,
     Released,
     Committed,

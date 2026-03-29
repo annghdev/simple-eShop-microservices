@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Warehouses\Queries\" />
-    <Folder Include="GrpcServices\Callers\" />
   </ItemGroup>
 
 </Project>

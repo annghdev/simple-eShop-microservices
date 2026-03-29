@@ -27,7 +27,6 @@ public enum PaymentMethod
 
     // Before Ship
     Online = 1,
-    BankTransfer = 2,
 }
 
 public enum PaymentStatus

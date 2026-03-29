@@ -39,7 +39,7 @@ public static class CreateOrderHandler
         var order = InitializeOrder(cmd); // Step 1
         ApplySimulatedPricingAndPromotion(order); // Step 2
         await ReserveInventoryAsync(order, getProductStocksCaller, ct); // Step 3
-        await PersistAndPublishAsync(order, context, bus, ct); // Step 4
+        await PublishEvensAsync(order, context, bus, ct); // Step 4
     }
 
     private static Domain.Order InitializeOrder(CreateOrderCommand cmd)
@@ -123,7 +123,7 @@ public static class CreateOrderHandler
         order.MarkReserved();
     }
 
-    private static async Task PersistAndPublishAsync(Domain.Order order, OrderDbContext context, IMessageBus bus, CancellationToken ct)
+    private static async Task PublishEvensAsync(Domain.Order order, OrderDbContext context, IMessageBus bus, CancellationToken ct)
     {
         context.Orders.Add(order);
 
@@ -133,10 +133,8 @@ public static class CreateOrderHandler
             order.FinalAmount,
             order.PaymentMethod.ToString(),
             order.Items.SelectMany(i => i.Reservations)
-                .Select(r => new Order.IntegrationEvents.ItemReservation(r.InventoryItemId, r.Quantity))
+                .Select(r => new IntegrationEvents.ItemReservation(r.InventoryItemId, r.Quantity))
                 .ToList()));
-
-        await context.SaveChangesAsync(ct);
     }
 
     private static GetProductStocksRequest BuildStockRequest(Domain.Order order)

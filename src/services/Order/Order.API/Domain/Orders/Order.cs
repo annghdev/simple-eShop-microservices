@@ -98,8 +98,13 @@ public class Order
         LastUpdated = now;
     }
 
-    public void MarkConfirmed(string confirmBy)
+    public void ConfirmManually(string confirmBy)
     {
+        if (Status != OrderStatus.Placed)
+        {
+            throw new InvalidOperationException("Only order with Placed status can be confirmed");
+        }
+
         var now = DateTimeOffset.UtcNow;
 
         Logs.Add(new OrderLog
@@ -119,7 +124,7 @@ public class Order
     public void MarkOnlinePaid()
     {
 
-        if (PaymentMethod == PaymentMethod.Online)
+        if (PaymentMethod == PaymentMethod.Online && Status == OrderStatus.Placed)
         {
             Paid = true;
             var now = DateTimeOffset.UtcNow;
@@ -129,31 +134,6 @@ public class Order
                 Action = OrderActions.Pay,
                 Actor = "System",
                 Description = "Online payment success, then confirm Order",
-                TimeStamp = now,
-                StatusBefore = Status,
-                StatusAfter = OrderStatus.Confirmed
-            });
-
-            LastUpdated = now;
-        }
-        else
-        {
-            throw new InvalidOperationException("Invalid payment method");
-        }
-    }
-
-    public void MarkBankTransferPaymentReceived(string actor)
-    {
-
-        if (PaymentMethod == PaymentMethod.BankTransfer)
-        {
-            Paid = true;
-            var now = DateTimeOffset.UtcNow;
-            Logs.Add(new OrderLog
-            {
-                Action = OrderActions.Pay,
-                Actor = actor,
-                Description = "Receive bankTransfer payment success, then confirm Order",
                 TimeStamp = now,
                 StatusBefore = Status,
                 StatusAfter = OrderStatus.Confirmed
@@ -186,6 +166,10 @@ public class Order
             Status = OrderStatus.Shipped;
             LastUpdated = now;
         }
+        else
+        {
+            throw new InvalidOperationException("Can not mark Shipped before Confirm");
+        }
     }
 
     public void MarkDelivered()
@@ -216,14 +200,27 @@ public class Order
         }
     }
 
-    public void MarkCancelled(string reason, string actor)
+    public void Cancel(string reason, string cancelBy)
     {
+        if (Status == OrderStatus.Cancelled)
+        {
+            throw new InvalidOperationException("Order is already cancelled");
+        }
+        else if (Status == OrderStatus.Shipped)
+        {
+            throw new InvalidOperationException("Can not cancel an already shipped order");
+        }
+        else if (Status == OrderStatus.Delivered && LastUpdated.Value.AddDays(7) < DateTimeOffset.Now)
+        {
+            throw new InvalidOperationException("Can not cancel an already delivered order more than 7 days ago");
+        }
+
         var now = DateTimeOffset.UtcNow;
         Logs.Add(new OrderLog
         {
             Action = OrderActions.Ship,
-            Actor = actor,
-            Description = $"Order cancelled by {actor} with reason: {reason}",
+            Actor = cancelBy,
+            Description = $"Order cancelled by {cancelBy} with reason: {reason}",
             TimeStamp = now,
             StatusBefore = Status,
             StatusAfter = OrderStatus.Cancelled

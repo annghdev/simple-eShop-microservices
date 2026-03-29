@@ -33,7 +33,6 @@
   <ItemGroup>
     <Folder Include="GrpcServices\Handlers\" />
     <Folder Include="Messaging\DomainEventHandlers\" />
-    <Folder Include="Messaging\IntegrationEventHandlers\" />
     <Folder Include="Persistence\Migrations\" />
   </ItemGroup>
 

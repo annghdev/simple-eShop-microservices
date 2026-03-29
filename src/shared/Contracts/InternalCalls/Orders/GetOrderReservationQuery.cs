@@ -13,10 +13,7 @@ public enum ReservationStatus
 {
     Pending,
     Failed,
-    Reserved,
-    Released,
-    Committed,
-    Restocked
+    Reserved
 }
 
 public record OrderReservationItem(Guid ItemId, int Quantity);

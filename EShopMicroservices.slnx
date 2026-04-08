@@ -28,7 +28,14 @@
   <Folder Name="/docker-composes/monitoring/tempo/">
     <File Path="docker-composes/monitoring/tempo/tempo.yml" />
   </Folder>
-  <Folder Name="/docker-composes/production/" />
+  <Folder Name="/docker-composes/production/">
+    <File Path="docker-composes/production/.env" />
+    <File Path="docker-composes/production/.env.example" />
+    <File Path="docker-composes/production/docker-compose.yaml" />
+    <File Path="docker-composes/production/down.ps1" />
+    <File Path="docker-composes/production/README.md" />
+    <File Path="docker-composes/production/run.ps1" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".dockerignore" />
     <File Path=".gitattributes" />

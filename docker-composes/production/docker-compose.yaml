@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ../postgres/01-create-databases.sql:/docker-entrypoint-initdb.d/01-create-databases.sql:ro
+      - ./postgres/01-create-databases.sql:/docker-entrypoint-initdb.d/01-create-databases.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d postgres"]
       interval: 10s
@@ -49,7 +49,7 @@ services:
 
   apigateway:
     build:
-      context: ../..
+      context: ..
       dockerfile: src/APIGateway/Dockerfile
     environment:
       DOTNET_RUNNING_IN_CONTAINER: "true"
@@ -85,7 +85,7 @@ services:
 
   catalog:
     build:
-      context: ../..
+      context: ..
       dockerfile: src/services/Catalog/Catalog.API/Dockerfile
     environment:
       DOTNET_RUNNING_IN_CONTAINER: "true"
@@ -110,7 +110,7 @@ services:
 
   inventory:
     build:
-      context: ../..
+      context: ..
       dockerfile: src/services/Inventory/Inventory.API/Dockerfile
     environment:
       DOTNET_RUNNING_IN_CONTAINER: "true"
@@ -136,7 +136,7 @@ services:
 
   order:
     build:
-      context: ../..
+      context: ..
       dockerfile: src/services/Order/Order.API/Dockerfile
     environment:
       DOTNET_RUNNING_IN_CONTAINER: "true"
@@ -162,7 +162,7 @@ services:
 
   payment:
     build:
-      context: ../..
+      context: ..
       dockerfile: src/services/Payment/Payment.API/Dockerfile
     environment:
       DOTNET_RUNNING_IN_CONTAINER: "true"
@@ -187,7 +187,7 @@ services:
 
   shipping:
     build:
-      context: ../..
+      context: ..
       dockerfile: src/services/Shipping/Shipping.API/Dockerfile
     environment:
       DOTNET_RUNNING_IN_CONTAINER: "true"
@@ -219,7 +219,7 @@ services:
     ports:
       - "${PROMETHEUS_PORT:-9090}:9090"
     volumes:
-      - ../development/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./development/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
     depends_on:
       - apigateway
@@ -241,7 +241,7 @@ services:
     ports:
       - "${LOKI_PORT:-3100}:3100"
     volumes:
-      - ../monitoring/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
+      - ./monitoring/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
       - loki_data:/loki
     restart: unless-stopped
     networks:
@@ -266,7 +266,7 @@ services:
       - "${TEMPO_PORT:-3200}:3200"
       - "${TEMPO_OTLP_GRPC_PORT:-4319}:4319"
     volumes:
-      - ../monitoring/tempo/tempo.yml:/etc/tempo/tempo.yml:ro
+      - ./monitoring/tempo/tempo.yml:/etc/tempo/tempo.yml:ro
       - tempo_data:/var/tempo
     restart: unless-stopped
     networks:
@@ -318,8 +318,8 @@ services:
       - "${GRAFANA_PORT:-3000}:3000"
     volumes:
       - grafana_data:/var/lib/grafana
-      - ../monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ../monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
     restart: unless-stopped
     networks:
       - eshop

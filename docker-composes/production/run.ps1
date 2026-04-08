@@ -3,6 +3,7 @@ $ErrorActionPreference = "Stop"
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Split-Path -Parent (Split-Path -Parent $scriptDir)
+$dockerComposesDir = Split-Path -Parent $scriptDir
 $composeFile = Join-Path $scriptDir "docker-compose.yaml"
 $envFile = Join-Path $scriptDir ".env"
 $envExampleFile = Join-Path $scriptDir ".env.example"
@@ -30,7 +31,7 @@ function Assert-DockerReady {
 }
 
 function Invoke-Compose([string[]]$ComposeArgs) {
-    docker compose --env-file $envFile -f $composeFile @ComposeArgs
+    docker compose --project-directory $dockerComposesDir --env-file $envFile -f $composeFile @ComposeArgs
 }
 
 Assert-DockerReady

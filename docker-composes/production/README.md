@@ -25,12 +25,12 @@ Sau đó đổi các giá trị nhạy cảm trong `.env` (mật khẩu Postgres
 .\docker-composes\production\run.ps1
 ```
 
-Script sẽ thực hiện `docker compose up -d --build`, tự động build các service .NET từ source (không cần image app trên registry riêng).
+Script sẽ thực hiện `docker compose up -d --build`, tự động build các service .NET từ source (không cần image app trên registry riêng) với `--project-directory .\docker-composes`.
 
 ## 4) Kiểm tra stack đang chạy
 
 ```powershell
-docker compose --env-file .\docker-composes\production\.env -f .\docker-composes\production\docker-compose.yaml ps
+docker compose --project-directory .\docker-composes --env-file .\docker-composes\production\.env -f .\docker-composes\production\docker-compose.yaml ps
 ```
 
 Tất cả container nên ở trạng thái `Up` (Postgres/Redis/RabbitMQ cần healthy trước khi các service phụ thuộc lên đầy đủ).
@@ -61,7 +61,7 @@ Invoke-WebRequest http://localhost:3100/ready -UseBasicParsing
 Nếu cần xem log:
 
 ```powershell
-docker compose --env-file .\docker-composes\production\.env -f .\docker-composes\production\docker-compose.yaml logs -f --tail 200
+docker compose --project-directory .\docker-composes --env-file .\docker-composes\production\.env -f .\docker-composes\production\docker-compose.yaml logs -f --tail 200
 ```
 
 ## 7) Dừng stack

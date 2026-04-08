@@ -12,9 +12,8 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/services/Shipping/Shipping.API/Shipping.API.csproj", "src/services/Shipping/Shipping.API/"]
-RUN dotnet restore "./src/services/Shipping/Shipping.API/Shipping.API.csproj"
 COPY . .
+RUN dotnet restore "./src/services/Shipping/Shipping.API/Shipping.API.csproj"
 WORKDIR "/src/src/services/Shipping/Shipping.API"
 RUN dotnet build "./Shipping.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

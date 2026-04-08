@@ -77,3 +77,4 @@ Lệnh trên sẽ `down --remove-orphans`.
 - Docker daemon chưa chạy: mở Docker Desktop trước khi run script.
 - Port bị trùng: đổi các biến `*_PORT` trong `.env`.
 - Build fail do thiếu resource: tăng CPU/RAM cho Docker Desktop.
+- Nếu Postgres `unhealthy` sau nhiều lần deploy: xoá volume Postgres cũ rồi deploy lại (nhất là khi đổi version image hoặc dữ liệu khởi tạo lỗi).

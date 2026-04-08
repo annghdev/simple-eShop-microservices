@@ -13,9 +13,8 @@ EXPOSE 8082
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/services/Inventory/Inventory.API/Inventory.API.csproj", "src/services/Inventory/Inventory.API/"]
-RUN dotnet restore "./src/services/Inventory/Inventory.API/Inventory.API.csproj"
 COPY . .
+RUN dotnet restore "./src/services/Inventory/Inventory.API/Inventory.API.csproj"
 WORKDIR "/src/src/services/Inventory/Inventory.API"
 RUN dotnet build "./Inventory.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

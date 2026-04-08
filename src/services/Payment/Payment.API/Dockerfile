@@ -12,9 +12,8 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/services/Payment/Payment.API/Payment.API.csproj", "src/services/Payment/Payment.API/"]
-RUN dotnet restore "./src/services/Payment/Payment.API/Payment.API.csproj"
 COPY . .
+RUN dotnet restore "./src/services/Payment/Payment.API/Payment.API.csproj"
 WORKDIR "/src/src/services/Payment/Payment.API"
 RUN dotnet build "./Payment.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

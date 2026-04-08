@@ -372,3 +372,4 @@ FodyWeavers.xsd
 /src/services/Payment/Payment.API/appsettings.Development.json
 /src/services/Shipping/Shipping.API/appsettings.Development.json
 /EShopMicroservices.sln
+/docker-composes/production/.env

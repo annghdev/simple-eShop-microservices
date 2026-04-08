@@ -164,11 +164,11 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
-
-if (!app.Environment.IsDevelopment())
+else
 {
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
 }
+
 
 app.UseAuthentication();
 app.UseAuthorization();

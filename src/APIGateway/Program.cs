@@ -154,14 +154,16 @@ app.MapDefaultEndpoints();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    //app.MapOpenApi();
+    //app.MapScalarApiReference();
+}
+else
+{
+    //app.UseHttpsRedirection();
 }
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.UseRateLimiter();
 app.UseAuthentication();

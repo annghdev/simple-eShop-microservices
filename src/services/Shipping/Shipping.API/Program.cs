@@ -90,8 +90,11 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+else
+{
+    //app.UseHttpsRedirection();
+}
 
-//app.UseHttpsRedirection();
 app.MapWolverineEndpoints();
 app.MapGet("/", () => Results.Redirect("scalar/v1"));
 

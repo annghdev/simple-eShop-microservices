@@ -13,7 +13,7 @@ using Wolverine.Marten;
 using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.ConfigureEshopDockerKestrel();
+builder.ConfigureEshopDockerKestrel(grpcOnDedicatedPort8082: true);
 
 #region Wolverine + Marten
 

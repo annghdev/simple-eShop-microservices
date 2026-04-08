@@ -19,15 +19,23 @@ public static class EshopKestrelExtensions
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
         }
 
-        // UseKestrel works with ConfigureWebHostBuilder; ConfigureKestrel extension targets IWebHostBuilder only.
+        // Keep HTTP :8080 from ASPNETCORE_URLS and add dedicated gRPC :8082 in container when needed.
         builder.WebHost.UseKestrel((_, options) =>
         {
             if (RunningInContainer())
             {
-                options.ListenAnyIP(8080, lo => lo.Protocols = HttpProtocols.Http1);
                 if (grpcOnDedicatedPort8082)
                 {
+                    // Explicitly bind both ports for gRPC services:
+                    // - 8080 for HTTP/1.1 REST endpoints (gateway + probes)
+                    // - 8082 for HTTP/2 cleartext gRPC calls
+                    options.ListenAnyIP(8080, lo => lo.Protocols = HttpProtocols.Http1);
                     options.ListenAnyIP(8082, lo => lo.Protocols = HttpProtocols.Http2);
+                }
+                else
+                {
+                    // Always bind :8080 in containers to avoid host/runtime differences in URL-based binding.
+                    options.ListenAnyIP(8080, lo => lo.Protocols = HttpProtocols.Http1);
                 }
             }
             else
@@ -40,5 +48,7 @@ public static class EshopKestrelExtensions
     }
 
     private static bool RunningInContainer() =>
-        string.Equals(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"), "true", StringComparison.OrdinalIgnoreCase);
+        string.Equals(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"), "true", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(Environment.GetEnvironmentVariable("ESHOP_FORCE_CONTAINER_KESTREL"), "true", StringComparison.OrdinalIgnoreCase)
+        || File.Exists("/.dockerenv");
 }

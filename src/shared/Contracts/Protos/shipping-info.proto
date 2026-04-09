@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package shippinginfo.v1;
+
+option csharp_namespace = "Contracts.Protos.ShippingInfo";
+
+service ShippingInfoGrpc {
+  rpc GetByOrderId (GetShippingInfoByOrderIdRequest) returns (GetShippingInfoByOrderIdResponse);
+}
+
+message GetShippingInfoByOrderIdRequest {
+  string order_id = 1;
+}
+
+message GetShippingInfoByOrderIdResponse {
+  bool found = 1;
+  string shipment_id = 2;
+  string order_id = 3;
+  int32 status = 4;
+  int32 delivery_method = 5;
+  string address = 6;
+  double ship_fee = 7;
+
+  int64 created_at_unix_ms = 8;
+  int64 started_at_unix_ms = 9;
+  int64 delivered_at_unix_ms = 10;
+  int64 failed_at_unix_ms = 11;
+  string failure_reason = 12;
+
+  repeated ShippingTrackingItem tracking = 13;
+}
+
+message ShippingTrackingItem {
+  int32 status = 1;
+  int64 timestamp_unix_ms = 2;
+  string description = 3;
+}
+

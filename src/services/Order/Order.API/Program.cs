@@ -1,4 +1,5 @@
 using Contracts.Protos.InventoryStocks;
+using Contracts.Protos.ShippingInfo;
 using Contracts.Common;
 using JasperFx;
 using JasperFx.Core;
@@ -98,6 +99,7 @@ builder.Services.AddWolverineHttp();
 builder.AddServiceDefaults();
 
 var inventoryGrpcAddress = builder.Configuration.GetConnectionString("inventory") ?? "http://localhost:5002";
+var shippingGrpcAddress = builder.Configuration.GetConnectionString("shipping") ?? "http://localhost:5005";
 
 #region GRPC
 builder.Services.AddGrpc();
@@ -109,6 +111,15 @@ builder.Services
     .AddServiceDiscovery();
 
 builder.Services.AddScoped<IGetProductStocksCaller, GetProductStocksCaller>();
+
+builder.Services
+    .AddGrpcClient<ShippingInfoGrpc.ShippingInfoGrpcClient>(options =>
+    {
+        options.Address = new Uri(shippingGrpcAddress);
+    })
+    .AddServiceDiscovery();
+
+builder.Services.AddScoped<IGetShippingInfoCaller, GetShippingInfoCaller>();
 #endregion
 
 builder.Services.AddScoped<DataSeeder>();

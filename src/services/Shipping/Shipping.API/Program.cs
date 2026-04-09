@@ -3,6 +3,8 @@ using JasperFx.Core;
 using JasperFx.Resources;
 using Kernel.Middlewares;
 using Microsoft.EntityFrameworkCore;
+using Shipping.API.GrpcServices.Handlers;
+using Shipping.API.Features.Shipments.Simulation;
 using Scalar.AspNetCore;
 using Shipping.IntegrationEvents;
 using Shipping.Persistence;
@@ -78,7 +80,12 @@ builder.Services.AddWolverineHttp();
 
 builder.AddServiceDefaults();
 
+builder.Services.Configure<FakeDeliverySimulationOptions>(
+    builder.Configuration.GetSection("FakeDeliverySimulation"));
+
 builder.Services.AddOpenApi();
+
+builder.Services.AddGrpc();
 
 var app = builder.Build();
 
@@ -94,6 +101,8 @@ else
 {
     //app.UseHttpsRedirection();
 }
+
+app.MapGrpcService<ShippingInfoGrpcHandler>();
 
 app.MapWolverineEndpoints();
 app.MapGet("/", () => Results.Redirect("scalar/v1"));

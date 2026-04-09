@@ -26,6 +26,7 @@
   <ItemGroup>
     <Protobuf Include="Protos\inventory-stock.proto" GrpcServices="Both" />
     <Protobuf Include="Protos\order-reservation-items.proto" GrpcServices="Both" />
+    <Protobuf Include="Protos\shipping-info.proto" GrpcServices="Both" />
   </ItemGroup>
 
 </Project>
